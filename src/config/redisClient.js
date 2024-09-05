@@ -11,6 +11,7 @@ redisClient.on('connect', () => {
 
 redisClient.on('error', (err) => {
     console.error('Error connecting to redis server:', err);
+    process.exit(1);
 });
 
 redisClient.connect();

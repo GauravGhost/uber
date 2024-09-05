@@ -1,24 +1,17 @@
 const { getPassengerBookingService, provideFeedbackService } = require("../services/passengerService")
+const catchFn = require('../utils/catchFn');
+const { SuccessResponseHandler } = require("../utils/response");
+
+const provideFeedback = catchFn(async (req, res) => {
+    const response = await provideFeedbackService(req.body);
+    return SuccessResponseHandler(req, res, 200, response, "Feedback Submitted Successfully");
+})
 
 
-const provideFeedback = async (req, res) => {
-    try {
-        const response = await provideFeedbackService(req.body);
-        return res.status(200).json({ data: response, success: true, error: null, message: "Feedback Submitted Successfully" })
-    } catch (error) {
-        return res.status(200).json({ data: null, success: false, error: error, message: "Error submitting feedback Failed" })
-    }
-}
-
-
-const getPassengerBookings = async (req, res) => {
-    try {
-        const response = await getPassengerBookingService(req.params.id);
-        return res.status(200).json({ data: response, success: true, error: null, message: "Data Fetched Successfully" })
-    } catch (error) {
-        return res.status(200).json({ data: null, success: false, error: error, message: "Data Fetch Failed" })
-    }
-}
+const getPassengerBookings = catchFn(async (req, res) => {
+    const response = await getPassengerBookingService(req.params.id);
+    return SuccessResponseHandler(req, res, 200, response, "Passanger Data Fetched Successfully")
+})
 
 
 module.exports = {

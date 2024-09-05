@@ -1,5 +1,4 @@
 const BookingRepository = require("../repositories/bookingRepository");
-
 const bookingRepository = new BookingRepository();
 
 

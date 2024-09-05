@@ -1,5 +1,6 @@
-const { registerService, loginService } = require("../services/authService")
-
+const { registerService, loginService } = require("../services/authService");
+const { SuccessResponseHandler } = require("../utils/response");
+const catchFn = require('../utils/catchFn')
 /**
  * Asynchronous function to handle user registration.
  * 
@@ -8,14 +9,10 @@ const { registerService, loginService } = require("../services/authService")
  * @returns {Object} The response object with status and data or error message.
  * @throws {Object} The error object if register process fails.
  */
-const register = async (req, res) => {
-    try {
-        const response = await registerService(req.body);
-        return res.status(200).json({ status: "success", data: response });
-    } catch (error) {
-        return res.status(500).json({ status: "error", data: {}, error: error });
-    }
-}
+const register = catchFn(async (req, res) => {
+    const response = await registerService(req.body);
+    return SuccessResponseHandler(req, res, 200, response);
+})
 
 /**
  * Asynchronous function to handle user login.
@@ -25,14 +22,10 @@ const register = async (req, res) => {
  * @returns {Object} The response object with status and data.
  * @throws {Object} The error object if login process fails.
  */
-const login = async (req, res) => {
-    try {
-        const response = await loginService(req.body);
-        return res.status(200).json({ status: "success", data: response, error: {} });
-    } catch (error) {
-        return res.status(500).json({ status: "error", data: {}, error: error });
-    }
-}
+const login = catchFn(async (req, res) => {
+    const response = await loginService(req.body);
+    return res.status(200).json({ status: "success", data: response, error: {} });
+})
 
 module.exports = {
     register,

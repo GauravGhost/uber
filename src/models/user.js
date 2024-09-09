@@ -5,11 +5,13 @@ const userSchema = new mongoose.Schema({
     name: String,
     email: {
         type: String,
+        required: true,
         unique: true
     },
     password: String,
     role: {
         type: String,
+        required: true,
         enum: ['driver', 'passenger'],
         default: 'passenger'
     },

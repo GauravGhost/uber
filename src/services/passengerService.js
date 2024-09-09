@@ -1,12 +1,13 @@
 const BookingRepository = require("../repositories/bookingRepository");
+const ApiError = require("../utils/apiError");
 const bookingRepository = new BookingRepository();
 
 
 const getPassengerBookingService = async (id) => {
-    const response = await bookingRepository.getPassengerBookings(id);
-    if (response.length == 0) {
-        throw new Error("Booking has not been made yet!")
+    if(!id){
+        throw new ApiError(400, "Unauthorized Access!")
     }
+    const response = await bookingRepository.getPassengerBookings(id);
     return response;
 }
 

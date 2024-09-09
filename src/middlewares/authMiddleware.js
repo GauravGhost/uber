@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/user');
 const { JWT_SECRET } = require('../config/serverConfig');
-
+const catchFn = require('../utils/catchFn');
+const ApiError = require('../utils/apiError');
 const verifyAuth = async (token) => {
     const payload = jwt.verify(token, JWT_SECRET);
     if (!payload) {
@@ -14,16 +15,17 @@ const verifyAuth = async (token) => {
     return user;
 }
 
-const authMiddleware = async (req, res, next) => {
+const authMiddleware = catchFn( async (req, res, next) => {
     // Get Token from the header in the request
     const { authorization } = req.headers;
     if (!authorization && !authorization?.startsWith('Bearer')) {
-        throw new Error("Token not found");
+        throw new ApiError(401, "Unauthorized");
     }
     const token = authorization.split(' ')[1];
-    const user = verifyAuth(token);
+    const user = await verifyAuth(token);
+    delete user.password;
     req.user = user;
     next();
-}
+})
 
 module.exports = authMiddleware;

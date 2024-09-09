@@ -10,20 +10,20 @@ const registerService = async (userData) => {
         }
         const response = await userRepository.create(userData);
         const token = await accessToken(response);
-        return { ...response, token };
+        return {user: response, token };
 }
 
 const loginService = async ({ email, password }) => {
         const user = await userRepository.getByEmail(email);
         if (!user) {
-            throw new Error("Invalid email or password")
+            throw new Error("Invalid email or password");
         }
 
-        const isPasswordSame = await User.comparePassword(password);
+        const isPasswordSame = await user.comparePassword(password);
         if (!isPasswordSame) {
-            throw new Error("Invalid email or password")
+            throw new Error("Invalid email or password");
         }
-        const token = accessToken(user);
+        const token = await accessToken(user);
         return { token: token };
 }
 

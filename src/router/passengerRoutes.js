@@ -5,10 +5,8 @@ const { getPassengerBookings, provideFeedback } = require('../controllers/passen
 
 const router = express.Router();
 
-module.exports = (io) => {
-    router.get('/bookings', authMiddleware, getPassengerBookings);
-    router.post('/feedback', authMiddleware, provideFeedback);
+router.get('/bookings', authMiddleware, getPassengerBookings);
+router.post('/feedback', authMiddleware, provideFeedback);
 
-    return router;
-}
+module.exports = router
 

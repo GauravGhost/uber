@@ -7,6 +7,11 @@ const createBooking = catchFn((io) => async (req, res) => {
     const { source, destination } = req.body;
     const userId = req.user._id;
     const response = bookingService.createBookingService({ passengerId: userId, source, destination });
+    const nearByDriver = await bookingService.findNearByDrivers(source);
+    for(const driver of nearByDriver){
+        // Get Socket id of driver
+        
+    }
     return SuccessResponseHandler(req, res, 201, response);
 });
 
